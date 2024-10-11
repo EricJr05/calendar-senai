@@ -10,15 +10,16 @@ html {
     font-family: Arial, sans-serif;
     font-weight: 700;
     font-size: 20px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-image: url(../img/fundo.jpg);
 }
 
 main {
-    height: 92%;
-    width: 92%;
-    background-image: url(../img/flores.jfif);
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: top center;
+    height: 60%;
+    width: 55%;
+    background-color: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -26,13 +27,13 @@ main {
     padding: 10px;
     border-radius: 30px;
     gap: 18px;
+    backdrop-filter: blur(10px);
 }
 
 h1 {
     margin: 0;
     color: whitesmoke;
-    background-color: rgba(0, 0, 0, 0.5);
-    width: 30%;
+    width: auto;
     padding: 2px;
     text-align: center;
 }
@@ -82,4 +83,84 @@ section {
     transform: scale(1.1);
     transition: 1s;
     background-color: rgb(224, 224, 224);
+}
+
+
+@media (max-width: 1200px) {
+    main {
+        width: 70%;
+    }
+
+    h1 {
+        width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    main {
+        width: 85%;
+        height: 70%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 18px;
+        width: 70%;
+    }
+
+    .cabecalho,
+    .dias {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .cabecalho div,
+    .dias div {
+        padding: 4px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 16px;
+        width: 100%;
+    }
+
+    main {
+        width: 95%;
+        height: 80%;
+        padding: 5px;
+    }
+
+    .cabecalho div,
+    .dias div {
+        padding: 2px;
+        font-size: 12px;
+    }
+}
+
+p {
+    color: white;
+    font-weight: 100;
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+}
+
+.dias .MP,
+.dias .PM {
+    backdrop-filter: blur(1px);
+    background-color: rgba(240, 248, 255, 0.8);
+}
+
+nav {
+    display: flex;
+    gap: 30px;
+}
+
+nav button {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 30px;
+    text-align: center;
 }
