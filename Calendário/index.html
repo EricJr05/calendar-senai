@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário 2024</title>
     <link rel="stylesheet" href="./css/style.css">
-    <title>Calendário</title>
 </head>
 
 <body>
     <main>
         <nav>
-            <button ><</button>
-            <h1 cla>Janeiro</h1>
-            <button>></button>
+            <button onclick="changeMonth(-1)">&#60;</button>
+            <h1 id="mes">Janeiro 2024</h1>
+            <button onclick="changeMonth(1)">&#62;</button>
         </nav>
         <section>
             <section class="cabecalho">
@@ -25,58 +25,92 @@
                 <div>S</div>
                 <div>S</div>
             </section>
-            <section class="dias">
-                <div class="dia MP">30</div>
-                <div class="dia MP">31</div>
-                <div class="dia">1</div>
-                <div class="dia">2</div>
-                <div class="dia">3</div>
-                <div class="dia">4</div>
-                <div class="dia">5</div>
-                <div class="dia">6</div>
-                <div class="dia">7</div>
-                <div class="dia">8</div>
-                <div class="dia">9</div>
-                <div class="dia">10</div>
-                <div class="dia">11</div>
-                <div class="dia">12</div>
-                <div class="dia">13</div>
-                <div class="dia">14</div>
-                <div class="dia">15</div>
-                <div class="dia">16</div>
-                <div class="dia">17</div>
-                <div class="dia">18</div>
-                <div class="dia">19</div>
-                <div class="dia">20</div>
-                <div class="dia">21</div>
-                <div class="dia">22</div>
-                <div class="dia">23</div>
-                <div class="dia">24</div>
-                <div class="dia">25</div>
-                <div class="dia">26</div>
-                <div class="dia">27</div>
-                <div class="dia">28</div>
-                <div class="dia">29</div>
-                <div class="dia">30</div>
-                <div class="dia">31</div>
-                <div class="dia PM">1</div>
-                <div class="dia PM">2</div>
+            <section id="dias" class="dias">
+
             </section>
         </section>
         <p id="mensagem"></p>
     </main>
 
     <script>
+        const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        let mesAtual = new Date().getMonth();
+        let anoAtual = new Date().getFullYear();
 
-        const dias = document.querySelectorAll('.dia');
-        const mensagem = document.getElementById('mensagem')
-        dias.forEach(dia => {
-            dia.addEventListener('click', () => {
-                dia.style.backgroundColor = dia.style.backgroundColor === '' ? 'rgb(240, 255, 33)' : '';
+        function diasNoMes(mes, ano) {
+            return new Date(ano, mes + 1, 0).getDate();
+        }
 
-                mensagem.textContent = `Você cliclou no dia ${dia.textContent} do `
-            });
-        });
+        function changeMonth(direcao) {
+            mesAtual += direcao;
+
+            if (mesAtual < 0) {
+                mesAtual = 11;
+                anoAtual--;
+            } else if (mesAtual > 11) {
+                mesAtual = 0;
+                anoAtual++;
+            }
+
+            document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
+            document.getElementById('mensagem').textContent = '';
+
+            atualizarDias();
+        }
+
+        function primeiroDiaDoMes(mes, ano) {
+            return new Date(ano, mes, 1).getDay();
+        }
+
+        function atualizarDias() {
+            const diasContainer = document.getElementById('dias');
+            diasContainer.innerHTML = '';
+
+            const totalDias = diasNoMes(mesAtual, anoAtual);
+            const primeiroDia = primeiroDiaDoMes(mesAtual, anoAtual);
+            const diasAnteriores = primeiroDia;
+
+            const diasDoMesAnterior = mesAtual === 0 ? diasNoMes(11, anoAtual - 1) : diasNoMes(mesAtual - 1, anoAtual);
+            for (let i = diasDoMesAnterior - diasAnteriores + 1; i <= diasDoMesAnterior; i++) {
+                const diaDiv = document.createElement('div');
+                diaDiv.className = 'dia MP';
+                diaDiv.textContent = i;
+                diaDiv.addEventListener('click', () => {
+                    diaDiv.style.backgroundColor = diaDiv.style.backgroundColor === '' ? 'rgb(240, 255, 33)' : '';
+                    const mesAnterior = mesAtual === 0 ? 'Dezembro' : meses[mesAtual - 1];
+                    document.getElementById('mensagem').textContent = `Você clicou no dia ${i} de ${mesAnterior}`;
+                });
+                diasContainer.appendChild(diaDiv);
+            }
+
+            for (let i = 1; i <= totalDias; i++) {
+                const diaDiv = document.createElement('div');
+                diaDiv.className = 'dia';
+                diaDiv.textContent = i;
+                diaDiv.addEventListener('click', () => {
+                    diaDiv.style.backgroundColor = diaDiv.style.backgroundColor === '' ? 'rgb(240, 255, 33)' : '';
+                    document.getElementById('mensagem').textContent = `Você clicou no dia ${i} de ${meses[mesAtual]}`;
+                });
+                diasContainer.appendChild(diaDiv);
+            }
+
+            const limite = 42 - diasContainer.children.length;
+            for (let i = 1; i <= limite; i++) {
+                const diaDiv = document.createElement('div');
+                diaDiv.className = 'dia PM';
+                diaDiv.textContent = i;
+                diaDiv.addEventListener('click', () => {
+                    diaDiv.style.backgroundColor = diaDiv.style.backgroundColor === '' ? 'rgb(240, 255, 33)' : '';
+                    const proximoMes = mesAtual === 11 ? 'Janeiro' : meses[mesAtual + 1];
+                    document.getElementById('mensagem').textContent = `Você clicou no dia ${i} de ${proximoMes}`;
+                });
+                diasContainer.appendChild(diaDiv);
+            }
+        }
+
+        document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
+        atualizarDias();
+
     </script>
 </body>
 
