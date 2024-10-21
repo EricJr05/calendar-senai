@@ -1,3 +1,46 @@
+@keyframes deslizamento {
+    25% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+
+    75% {
+        transform: translateX(50%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes deslizamento-reverso {
+    25% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translateX(50%);
+        opacity: 0;
+    }
+
+    75% {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
 body,
 html {
     width: 100%;
@@ -28,6 +71,15 @@ main {
     border-radius: 30px;
     gap: 18px;
     backdrop-filter: blur(10px);
+    transition: transform 1s ease-in-out, opacity 1s ease-in-out;
+}
+
+.proximo {
+    animation: deslizamento 1s forwards;
+}
+
+.anterior {
+    animation: deslizamento-reverso 1s forwards;
 }
 
 h1 {
@@ -82,7 +134,7 @@ section {
 .dias div:hover {
     transform: scale(1.1);
     transition: 1s;
-    background-color: rgb(224, 224, 224);
+    background-color: rgb(206, 206, 206);
 }
 
 
@@ -154,13 +206,16 @@ p {
 }
 
 nav {
+    width: 90%;
     display: flex;
+    justify-content: space-between;
     gap: 30px;
 }
 
 nav button {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: transparent;
     border: none;
-    font-size: 30px;
+    font-size: 40px;
     text-align: center;
+    color: aliceblue;
 }

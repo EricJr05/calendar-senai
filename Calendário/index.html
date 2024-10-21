@@ -9,11 +9,13 @@
 </head>
 
 <body>
-    <main>
+    <main id="main">
         <nav>
-            <button onclick="changeMonth(-1)">&#60;</button>
             <h1 id="mes">Janeiro 2024</h1>
-            <button onclick="changeMonth(1)">&#62;</button>
+            <div>
+                <button onclick="changeMonth(-1)">&#60;</button>
+                <button onclick="changeMonth(1)">&#62;</button>
+            </div>
         </nav>
         <section>
             <section class="cabecalho">
@@ -36,30 +38,38 @@
         const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
         let mesAtual = new Date().getMonth();
         let anoAtual = new Date().getFullYear();
+        let diaAtual = new Date().getDate();
 
         function diasNoMes(mes, ano) {
             return new Date(ano, mes + 1, 0).getDate();
         }
 
-        function changeMonth(direcao) {
-            mesAtual += direcao;
-
-            if (mesAtual < 0) {
-                mesAtual = 11;
-                anoAtual--;
-            } else if (mesAtual > 11) {
-                mesAtual = 0;
-                anoAtual++;
-            }
-
-            document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
-            document.getElementById('mensagem').textContent = '';
-
-            atualizarDias();
-        }
-
         function primeiroDiaDoMes(mes, ano) {
             return new Date(ano, mes, 1).getDay();
+        }
+
+        function changeMonth(direcao) {
+            const main = document.querySelector('main');
+
+            main.classList.add(direcao === 1 ? 'proximo' : 'anterior');
+
+            setTimeout(() => {
+                mesAtual += direcao;
+
+                if (mesAtual < 0) {
+                    mesAtual = 11;
+                    anoAtual--;
+                } else if (mesAtual > 11) {
+                    mesAtual = 0;
+                    anoAtual++;
+                }
+
+                document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
+                document.getElementById('mensagem').textContent = '';
+                atualizarDias();
+
+                main.classList.remove(direcao === 1 ? 'proximo' : 'anterior');
+            }, 1000);
         }
 
         function atualizarDias() {
@@ -85,7 +95,7 @@
 
             for (let i = 1; i <= totalDias; i++) {
                 const diaDiv = document.createElement('div');
-                diaDiv.className = 'dia';
+                diaDiv.className = i === diaAtual ? 'dia hoje' : 'dia';
                 diaDiv.textContent = i;
                 diaDiv.addEventListener('click', () => {
                     diaDiv.style.backgroundColor = diaDiv.style.backgroundColor === '' ? 'rgb(240, 255, 33)' : '';
@@ -110,7 +120,6 @@
 
         document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
         atualizarDias();
-
     </script>
 </body>
 
