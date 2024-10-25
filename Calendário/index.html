@@ -5,16 +5,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendário 2024</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="./css/style.css">
 </head>
 
 <body>
     <main id="main">
         <nav>
-            <h1 id="mes">Janeiro 2024</h1>
             <div>
-                <button onclick="changeMonth(-1)">&#60;</button>
-                <button onclick="changeMonth(1)">&#62;</button>
+                <i class="fas fa-bars" id="abrir"></i>
+                <dialog id="menu">
+                    <p id="fechar">X</p>
+                    <input type="checkbox" id="chk" class="checkbox">
+                    <label id="claro-escuro" for="chk" class="label">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <div class="bola"></div>
+                    </label>
+                    <label id="visualiza" for="escolha">Escolha uma opção:</label>
+                    <select id="escolha" name="escolha">
+                        <option value="mensal">Opção Mensal</option>
+                        <option value="semanal">Opção Semanal</option>
+                    </select>
+                    <button id="confirmarEscolha">Confirmar</button>
+                    <h2>Temas Personalizados</h2>
+                    <section class="temas">
+                        <img src="./img/fundo.jpg" alt="Floresta com um caminho de água e montanha">
+                        <img src="./img/bonitinho.jpg" alt="Lua com estrlas cadentes no céu e uma casa">
+                        <img src="./img/sol-bonito.jpg" alt="Várias montanhas e um sol nascendo">
+                        <img src="./img/astronauta.webp" alt="Fundo escuro com um astronauta sentado na nuvem">
+                    </section>
+                </dialog>
+                <h1 id="mes"></h1>
+            </div>
+            <div id="setas">
+                <button id="seta-esquerda" onclick="changeMonth(-1)">&#60;</button>
+                <button id="seta-direita" onclick="changeMonth(1)">&#62;</button>
             </div>
         </nav>
         <section>
@@ -27,18 +53,44 @@
                 <div>S</div>
                 <div>S</div>
             </section>
-            <section id="dias" class="dias">
-
-            </section>
+            <section id="dias" class="dias"></section>
         </section>
         <p id="mensagem"></p>
     </main>
 
     <script>
+
+        //------------MENU------------//
+        const open = document.getElementById('abrir');
+        const menu = document.getElementById('menu');
+        const close = document.getElementById('fechar');
+        const chk = document.getElementById('chk');
+        const fundo = document.querySelector('body');
+
+        open.addEventListener('click', () => {
+            menu.showModal();
+        });
+
+        close.addEventListener('click', () => {
+            menu.close();
+        });
+
+        chk.addEventListener('change', () => {
+            if (chk.checked) {
+                fundo.style.backgroundImage = "url(../img/nuvens.jpg)";
+            } else {
+                fundo.style.backgroundImage = "url('../img/noite-escuro.jpg')";
+            }
+        });
+
+
+
+        //------------CALENDÁRIO MENSAL------------//
         const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-        let mesAtual = new Date().getMonth();
-        let anoAtual = new Date().getFullYear();
-        let diaAtual = new Date().getDate();
+        let dataAtual = new Date();
+        let mesAtual = dataAtual.getMonth();
+        let anoAtual = dataAtual.getFullYear();
+        let diaAtual = dataAtual.getDate();
 
         function diasNoMes(mes, ano) {
             return new Date(ano, mes + 1, 0).getDate();
@@ -50,7 +102,6 @@
 
         function changeMonth(direcao) {
             const main = document.querySelector('main');
-
             main.classList.add(direcao === 1 ? 'proximo' : 'anterior');
 
             setTimeout(() => {
@@ -66,20 +117,20 @@
 
                 document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
                 document.getElementById('mensagem').textContent = '';
-                atualizarDias();
 
                 main.classList.remove(direcao === 1 ? 'proximo' : 'anterior');
-            }, 1000);
+                CalendarioMensal();
+            }, 900);
         }
 
-        function atualizarDias() {
+        function CalendarioMensal() {
+            document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
             const diasContainer = document.getElementById('dias');
             diasContainer.innerHTML = '';
 
             const totalDias = diasNoMes(mesAtual, anoAtual);
             const primeiroDia = primeiroDiaDoMes(mesAtual, anoAtual);
             const diasAnteriores = primeiroDia;
-
             const diasDoMesAnterior = mesAtual === 0 ? diasNoMes(11, anoAtual - 1) : diasNoMes(mesAtual - 1, anoAtual);
             for (let i = diasDoMesAnterior - diasAnteriores + 1; i <= diasDoMesAnterior; i++) {
                 const diaDiv = document.createElement('div');
@@ -92,10 +143,9 @@
                 });
                 diasContainer.appendChild(diaDiv);
             }
-
             for (let i = 1; i <= totalDias; i++) {
                 const diaDiv = document.createElement('div');
-                diaDiv.className = i === diaAtual ? 'dia hoje' : 'dia';
+                diaDiv.className = i === diaAtual && mesAtual === dataAtual.getMonth() && anoAtual === dataAtual.getFullYear() ? 'dia hoje' : 'dia';
                 diaDiv.textContent = i;
                 diaDiv.addEventListener('click', () => {
                     diaDiv.style.backgroundColor = diaDiv.style.backgroundColor === '' ? 'rgb(240, 255, 33)' : '';
@@ -103,7 +153,6 @@
                 });
                 diasContainer.appendChild(diaDiv);
             }
-
             const limite = 42 - diasContainer.children.length;
             for (let i = 1; i <= limite; i++) {
                 const diaDiv = document.createElement('div');
@@ -117,9 +166,117 @@
                 diasContainer.appendChild(diaDiv);
             }
         }
+        CalendarioMensal();
 
-        document.getElementById('mes').textContent = `${meses[mesAtual]} ${anoAtual}`;
-        atualizarDias();
+
+
+        //------------CALENDÁRIO SEMANAL------------//
+        function CalendarioSemanal() {
+            setaSemanal();
+            document.getElementById('mensagem').textContent = '';
+            document.getElementById('mes').textContent = ''
+            const calendarioElemento = document.getElementById('dias');
+            const diasContainer = calendarioElemento;
+            diasContainer.innerHTML = '';
+
+            for (let i = 0; i < 7; i++) {
+                const data = new Date(dataAtual);
+                data.setDate(dataAtual.getDate() + i);
+
+                const diaElemento = document.createElement('div');
+                diaElemento.className = 'diaSemana';
+                diaElemento.innerText = data.toLocaleDateString();
+                calendarioElemento.appendChild(diaElemento);
+            }
+        }
+
+        function changeWeek(i) {
+            dataAtual.setDate(dataAtual.getDate() + (i * 7));
+            CalendarioSemanal();
+        }
+
+
+
+        //------------ESCOLHA------------//
+        const escolha = document.getElementById('escolha');
+        const botaoAtualizar = document.getElementById('confirmarEscolha');
+        const diasContainer = document.getElementById('dias');
+
+        botaoAtualizar.addEventListener('click', () => {
+            const selecionado = escolha.value;
+
+            diasContainer.classList.add('fade-out');
+
+            setTimeout(() => {
+                if (selecionado === 'mensal') {
+                    CalendarioMensal();
+                    setaMensal();
+                } else if (selecionado === 'semanal') {
+                    CalendarioSemanal();
+                    setaSemanal();
+                }
+
+                diasContainer.classList.remove('fade-out');
+                diasContainer.classList.add('fade-in');
+
+                setTimeout(() => {
+                    diasContainer.classList.remove('fade-in');
+                }, 500);
+            }, 300);
+        });
+
+
+
+        //------------ALTERAR SETAS------------//
+        function setaSemanal() {
+            document.getElementById('seta-esquerda').onclick = function () {
+                changeWeek(-1);
+            };
+
+            document.getElementById('seta-direita').onclick = function () {
+                changeWeek(1);
+            };
+        }
+
+        function setaMensal() {
+            document.getElementById('seta-esquerda').onclick = function () {
+                changeMonth(-1);
+            };
+
+            document.getElementById('seta-direita').onclick = function () {
+                changeMonth(1);
+            };
+        }
+
+
+
+        //------------TEMAS------------//
+        document.querySelectorAll('dialog .temas img').forEach((img, index) => {
+            img.addEventListener('click', () => {
+                switch (index) {
+                    case 0:
+                        fundo.style.backgroundImage = "url(../img/fundo.jpg)";
+                        break;
+                    case 1:
+                        fundo.style.backgroundImage = "url(./img/bonitinho.jpg)";
+                        break;
+                    case 2:
+                        fundo.style.backgroundImage = "url(./img/sol-bonito.jpg)";
+                        break;
+                    case 3:
+                        fundo.style.backgroundImage = "url(./img/astronauta.webp)";
+                        break;
+                    default:
+                        break;
+                }
+            });
+        });
+
+
+        //------------INICIALIZA------------//
+        CalendarioMensal();
+
+        
     </script>
 </body>
 

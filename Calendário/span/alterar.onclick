@@ -1,0 +1,11 @@
+function alterarOnclick() {
+    // Altera o atributo onclick da seta esquerda
+    document.querySelector("#setas button:nth-child(1)").onclick = function() {
+        novaFuncao(-1);
+    };
+
+    // Altera o atributo onclick da seta direita
+    document.querySelector("#setas button:nth-child(2)").onclick = function() {
+        novaFuncao(1);
+    };
+}
