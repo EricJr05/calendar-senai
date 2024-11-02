@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário 2024</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <main id="main">
+        <nav>
+            <div>
+                <i class="fas fa-bars" id="abrir"></i>
+                <dialog id="menu">
+                    <p class="fechar" id="fechar">X</p>
+                    <input type="checkbox" id="chk" class="checkbox">
+                    <label id="claro-escuro" for="chk" class="label">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <div class="bola"></div>
+                    </label>
+                    <label id="visualiza" for="escolha">Escolha uma opção:</label>
+                    <select id="escolha" name="escolha">
+                        <option value="mensal">Opção Mensal</option>
+                        <option value="semanal">Opção Semanal</option>
+                    </select>
+                    <button id="confirmarEscolha">Confirmar</button>
+                    <h2>Temas Personalizados</h2>
+                    <section class="temas">
+                        <img src="./img/fundo.jpg" alt="Floresta com um caminho de água e montanha">
+                        <img src="./img/bonitinho.jpg" alt="Lua com estrlas cadentes no céu e uma casa">
+                        <img src="./img/sol-bonito.jpg" alt="Várias montanhas e um sol nascendo">
+                        <img src="./img/astronauta.webp" alt="Fundo escuro com um astronauta sentado na nuvem">
+                    </section>
+                </dialog>
+                <h1 id="mes"></h1>
+            </div>
+            <div id="setas">
+                <button id="seta-esquerda" onclick="changeMonth(-1)">&#60;</button>
+                <button id="seta-direita" onclick="changeMonth(1)">&#62;</button>
+            </div>
+        </nav>
+        <section>
+            <section class="cabecalho">
+                <div>D</div>
+                <div>S</div>
+                <div>T</div>
+                <div>Q</div>
+                <div>Q</div>
+                <div>S</div>
+                <div>S</div>
+            </section>
+            <section id="dias" class="dias"></section>
+        </section>
+        <p id="mensagem"></p>
+    </main>
+    <div id="modal" class="modal">
+        <div class="modal-conteudo">
+            <span class="fechar" id="fecharModal">&times;</span>
+            <h2>Adicionar Evento</h2>
+            <form id="formEvento" action="db.php" method="POST" target="_blank">
+                <label for="nomeEvento">Nome do Evento:</label>
+                <input type="text" id="nomeEvento" name="nomeEvento" required>
+                <input type="date" id="dataEvento" name="dataEvento" hidden>
+                <button type="submit" id="salvarEvento">Salvar Evento</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+
+</html>

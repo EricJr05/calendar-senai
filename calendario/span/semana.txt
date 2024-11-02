@@ -1,0 +1,28 @@
+function renderCalendar() {
+            const calendarElement = document.getElementById('calendar');
+            calendarElement.innerHTML = '';
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(currentDate);
+                date.setDate(currentDate.getDate() + i);
+
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.innerText = date.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+                calendarElement.appendChild(dayElement);
+            }
+        }
+
+        function nextWeek() {
+            currentDate.setDate(currentDate.getDate() + 7);
+            renderCalendar();
+        }
+
+        function previousWeek() {
+            currentDate.setDate(currentDate.getDate() - 7);
+            renderCalendar();
+        }
+
+        // Renderiza o calendário inicial
+        renderCalendar();
